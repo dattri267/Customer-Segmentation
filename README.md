@@ -1,9 +1,6 @@
 # Customer-Segmentation
 Mall Customer Segmentation using K means clustering
 
-
-# Customer Segmentation System
-
 A machine learning-based web application that segments customers based on their income and spending score using K-Means clustering.
 
 ## Features
