@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation System</title>
+
+    <link rel='stylesheet' href="{{ url_for('static', filename='style.css')}}">
+
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: rgb(107, 112, 144);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 90%;
+            margin: auto;
+        }
+
+        .left-panel,
+        .right-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(6px);
+        }
+
+        .right-panel {
+            text-align: center;
+        }
+
+        input,
+        select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background-color: cadetblue;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .result,
+        .graph {
+            margin-top: 20px;
+            color: white;
+        }
+
+      
+        .history {
+            width: 90%;
+            margin: 20px auto;
+            color: white;
+        }
+
+        .table-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            color: black;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Customer Segmentation System</h1>
+
+ 
+    <div class="main-container">
+
+      
+        <div class="left-panel">
+            <form action="/predict" method="post">
+
+                <input type="number" name="age" placeholder="Age" required>
+
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
+                <input type="number" name="income" placeholder="Income" required>
+                <input type="number" name="score" placeholder="Spending Score (1-100)" min="1" max="100" required>
+                <button type="submit">Analyze Customer</button>
+
+            </form>
+        </div>
+
+       
+        <div class="right-panel">
+
+            {% if prediction_text %}
+            <div class="result">
+                <h3>{{ prediction_text }}</h3>
+                <p><b>Recommendation:</b> {{ recommendation }}</p>
+            </div>
+
+            <div class="graph">
+                <h3>Customer Distribution</h3>
+                <img src="{{ url_for('static', filename='plot.png') }}" width="350">
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+  
+    <div class="history">
+        <h3>Recent Predictions</h3>
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Income</th>
+                    <th>Score</th>
+                    <th>Cluster</th>
+                    <th>Type</th>
+                </tr>
+
+            {%if history %}
+                {% for h in history %}
+                <tr>
+                    <td>{{ h.income }}</td>
+                    <td>{{ h.score }}</td>
+                    <td>{{ h.cluster }}</td>
+                    <td>{{ h.result }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No data yet</td>
+            </tr>
+            {% endif %}
+
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
